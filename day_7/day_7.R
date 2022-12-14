@@ -81,3 +81,24 @@ for(b in blocks_list) {
   
   current_sum <- current_sum + sum(files_sizes)
 }
+
+#get all the dirs immediately contained  one - approach is not valid as there are duplicate directory names
+
+parent <- c()
+children <- list()
+parent_size <- c()
+
+for(b in blocks_list) {
+  if(length(b) > 1) {
+    parent <- c(parent, gsub("\\$ cd ", "", b[1]))
+    ls <- b[grepl("dir ", b)] |> {\(x) gsub("dir ","", x)}()
+    children <-  lappend(children, ls)
+    
+    files <- b[!grepl("dir ", b)]
+    s <- gsub("[^0-9]", "", files[3:length(files)]) |> as.numeric() |> sum()
+    parent_size <-  c(parent_size, s)
+  }
+}
+
+
+ 
